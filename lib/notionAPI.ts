@@ -12,13 +12,13 @@ export const getPageList = async (): Promise<PageList> => {
     filter: {
       and: [
         {
-          property: 'Tag',
+          property: 'Tags',
           multi_select: {
             does_not_contain: '授業',
           },
         },
         {
-          property: 'Tag',
+          property: 'Tags',
           multi_select: {
             does_not_contain: 'memo',
           },
