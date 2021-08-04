@@ -19,6 +19,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
+    '@typescript-eslint/ban-ts-comment': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     'react/prefer-stateless-function': ['error'],
