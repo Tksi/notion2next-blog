@@ -4,7 +4,14 @@ const notion = new Client({
   auth: process.env.NOTION_KEY,
 });
 
-export type PageList = { title: string; id: string }[];
+export type PageInfo = {
+  Name: string;
+  page_id: string;
+  ['Last edited']: string;
+  Tags: { id: string; name: string; color: string }[];
+};
+
+export type PageList = PageInfo[];
 
 export const getPageList = async (): Promise<PageList> => {
   const res = await notion.databases.query({
@@ -34,8 +41,25 @@ export const getPageList = async (): Promise<PageList> => {
   });
 
   return res.results.map((v) => ({
-    // @ts-ignore titleが無いとか言われる(@notionhq/clientのバグ？)
-    title: v.properties.Name.title[0].plain_text,
-    id: v.id,
+    page_id: v.id,
+    // @ts-ignore
+    Name: v.properties.Name.title[0].plain_text,
+    // @ts-ignore
+    ['Last edited']: v.properties['Last edited'].last_edited_time,
+    // @ts-ignore
+    Tags: v.properties.Tags.multi_select,
   }));
+};
+
+export const getPageInfo = async (page_id: string): Promise<PageInfo> => {
+  const res = await notion.pages.retrieve({ page_id });
+  return {
+    page_id: res.id,
+    // @ts-ignore
+    Name: res.properties.Name.title[0].plain_text,
+    // @ts-ignore
+    ['Last edited']: res.properties['Last edited'].last_edited_time,
+    // @ts-ignore
+    Tags: res.properties.Tags.multi_select,
+  };
 };

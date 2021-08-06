@@ -1,23 +1,23 @@
 import { VFC } from 'react';
 import Link from 'next/link';
-import { PageList, getPageList } from 'lib/notionAPI';
-import { GetStaticProps } from 'next';
-
-type Props = { pageList: PageList };
+import { PageList, PageInfo, getPageList } from 'lib/notionAPI';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
 export const getStaticProps: GetStaticProps<{ pageList: PageList }> =
   async () => ({
     props: { pageList: await getPageList() },
   });
 
+type Props = InferGetStaticPropsType<typeof getStaticProps>;
+
 const index: VFC<Props> = ({ pageList }) => {
   return (
     <>
       <ul>
-        {pageList.map((v) => (
-          <li key={v.id}>
-            <Link href={`/posts/${v.id}`}>
-              <a>{v.title}</a>
+        {pageList.map((v: PageInfo) => (
+          <li key={v.page_id}>
+            <Link href={`/page/${v.page_id}`}>
+              <a>{v.Name}</a>
             </Link>
           </li>
         ))}
