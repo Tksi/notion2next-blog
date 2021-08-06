@@ -1,5 +1,5 @@
 import { VFC } from 'react';
-import { GetStaticProps, GetStaticPaths, InferGetStaticPropsType } from 'next';
+import { GetStaticProps, GetStaticPaths } from 'next';
 import {
   PageInfo,
   getPageList,
@@ -7,7 +7,7 @@ import {
   getPageContent,
 } from 'lib/notionAPI';
 import { BlocksChildrenListResponse } from '@notionhq/client/build/src/api-endpoints';
-
+import { PageContentRenderer } from 'components/PageContentRenderer';
 type Params = {
   page_id: string;
 };
@@ -33,7 +33,7 @@ const page_id: VFC<Props> = ({ pageInfo, pageContent }) => {
   return (
     <>
       <h1>{JSON.stringify(pageInfo)}</h1>
-      {/* // [] renderするコンポーネントつくる */}
+      <PageContentRenderer pageContent={pageContent} />
       <h1>{JSON.stringify(pageContent)}</h1>
     </>
   );
