@@ -1,4 +1,5 @@
 import { Client } from '@notionhq/client';
+import { BlocksChildrenListResponse } from '@notionhq/client/build/src/api-endpoints';
 
 const notion = new Client({
   auth: process.env.NOTION_KEY,
@@ -62,4 +63,14 @@ export const getPageInfo = async (page_id: string): Promise<PageInfo> => {
     // @ts-ignore
     Tags: res.properties.Tags.multi_select,
   };
+};
+
+export const getPageContent = async (
+  page_id: string
+): Promise<BlocksChildrenListResponse> => {
+  const res = await notion.blocks.children.list({
+    block_id: page_id,
+    page_size: 100,
+  });
+  return res;
 };

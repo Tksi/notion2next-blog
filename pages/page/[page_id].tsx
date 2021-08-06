@@ -1,6 +1,12 @@
 import { VFC } from 'react';
 import { GetStaticProps, GetStaticPaths, InferGetStaticPropsType } from 'next';
-import { getPageList, getPageInfo, PageInfo } from 'lib/notionAPI';
+import {
+  PageInfo,
+  getPageList,
+  getPageInfo,
+  getPageContent,
+} from 'lib/notionAPI';
+import { BlocksChildrenListResponse } from '@notionhq/client/build/src/api-endpoints';
 
 type Params = {
   page_id: string;
@@ -11,24 +17,26 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => ({
   fallback: false,
 });
 
-export const getStaticProps: GetStaticProps<PageInfo, Params> = async ({
+type Props = { pageInfo: PageInfo; pageContent: BlocksChildrenListResponse };
+
+export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params,
 }) => {
   const pageInfo = await getPageInfo(params?.page_id ?? '');
-  // [] contentをもってくる
+  const pageContent = await getPageContent(params?.page_id ?? '');
   return {
-    props: pageInfo,
+    props: { pageInfo, pageContent },
   };
 };
 
-type Props = InferGetStaticPropsType<typeof getStaticProps>;
-
-const id: VFC<Props> = (pageInfo) => {
+const page_id: VFC<Props> = ({ pageInfo, pageContent }) => {
   return (
     <>
       <h1>{JSON.stringify(pageInfo)}</h1>
+      {/* // [] renderするコンポーネントつくる */}
+      <h1>{JSON.stringify(pageContent)}</h1>
     </>
   );
 };
 
-export default id;
+export default page_id;
