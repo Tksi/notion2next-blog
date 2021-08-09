@@ -10,6 +10,7 @@ export const getStaticProps: GetStaticProps<{ pageList: PageList }> =
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
+// [] Github Pagesにする(とりあえずcommit時にbuild)
 // [] ページタイトルはDBのtitleにする
 // [] タグ表示
 const index: VFC<Props> = ({ pageList }) => {
