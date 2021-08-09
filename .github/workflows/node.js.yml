@@ -40,6 +40,8 @@ jobs:
         run: npm run lint
 
       - name: Build
+        env:
+          SECRET_VARIABLE: ${{ secrets.SECRET_VARIABLE }}
         run: |
           npm run build
           npm run export
