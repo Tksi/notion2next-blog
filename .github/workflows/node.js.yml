@@ -39,10 +39,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Deploy
+      - name: Build
         run: npm run build
         run: npm run export
         run: touch ./out/.nojekyll
+
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
