@@ -38,18 +38,3 @@ jobs:
 
       - name: Lint
         run: npm run lint
-
-      - name: Build
-        env:
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-          NOTION_KEY: ${{ secrets.NOTION_KEY }}
-        run: |
-          npm run build
-          npm run export
-          touch ./out/.nojekyll
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
