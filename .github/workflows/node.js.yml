@@ -41,7 +41,8 @@ jobs:
 
       - name: Build
         env:
-          SECRET_VARIABLE: ${{ secrets.SECRET_VARIABLE }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          NOTION_KEY: ${{ secrets.NOTION_KEY }}
         run: |
           npm run build
           npm run export
