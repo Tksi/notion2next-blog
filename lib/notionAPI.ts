@@ -1,5 +1,6 @@
 import { Client } from '@notionhq/client';
 import { BlocksChildrenListResponse } from '@notionhq/client/build/src/api-endpoints';
+import { Block } from '@notionhq/client/build/src/api-types';
 
 const notion = new Client({
   auth: process.env.NOTION_KEY,
@@ -15,24 +16,9 @@ export type PageInfo = {
 export type PageList = PageInfo[];
 
 export const getPageList = async (): Promise<PageList> => {
+  // これデフォルトのソートどうなってるの
   const res = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID ?? '',
-    filter: {
-      and: [
-        {
-          property: 'Tags',
-          multi_select: {
-            does_not_contain: '授業',
-          },
-        },
-        {
-          property: 'Tags',
-          multi_select: {
-            does_not_contain: 'memo',
-          },
-        },
-      ],
-    },
     sorts: [
       {
         property: 'Last edited',
@@ -65,12 +51,16 @@ export const getPageInfo = async (page_id: string): Promise<PageInfo> => {
   };
 };
 
-export const getPageContent = async (
-  page_id: string
-): Promise<BlocksChildrenListResponse> => {
-  const res = await notion.blocks.children.list({
-    block_id: page_id,
-    page_size: 100,
-  });
-  return res;
+export const getPageContent = async (page_id: string): Promise<Block[]> => {
+  const arr = [];
+  let start_cursor: string | undefined = undefined;
+  for (;;) {
+    const res: BlocksChildrenListResponse = await notion.blocks.children.list({
+      block_id: page_id,
+      start_cursor,
+    });
+    arr.push(...res.results);
+    if (!res.has_more) return arr;
+    start_cursor = res.next_cursor as string;
+  }
 };

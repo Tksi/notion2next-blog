@@ -6,7 +6,7 @@ import {
   getPageInfo,
   getPageContent,
 } from 'lib/notionAPI';
-import { BlocksChildrenListResponse } from '@notionhq/client/build/src/api-endpoints';
+import { Block } from '@notionhq/client/build/src/api-types';
 import { PageContentRenderer } from 'components/PageContentRenderer';
 type Params = {
   page_id: string;
@@ -17,7 +17,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => ({
   fallback: false,
 });
 
-type Props = { pageInfo: PageInfo; pageContent: BlocksChildrenListResponse };
+type Props = { pageInfo: PageInfo; pageContent: Block[] };
 
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params,
@@ -30,11 +30,12 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 };
 
 const page_id: VFC<Props> = ({ pageInfo, pageContent }) => {
+  // [] pageaInfoのせる
+  // [] Tagごとのページ作る
+  // [] CSS追加
   return (
     <>
-      <h1>{JSON.stringify(pageInfo)}</h1>
       <PageContentRenderer pageContent={pageContent} />
-      <h1>{JSON.stringify(pageContent)}</h1>
     </>
   );
 };

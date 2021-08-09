@@ -10,6 +10,8 @@ export const getStaticProps: GetStaticProps<{ pageList: PageList }> =
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
+// [] ページタイトルはDBのtitleにする
+// [] タグ表示
 const index: VFC<Props> = ({ pageList }) => {
   return (
     <>
